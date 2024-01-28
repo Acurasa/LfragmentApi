@@ -10,7 +10,7 @@ namespace LfragmentApi.Entities
         public const string java = "Java";
         public const string cpp = "C++";
         public const string js = "JavaScript";
-        public const string rubyonrails = "RubyOnRails";
+        public const string ruby_on_rails = "RubyOnRails";
         public const string haskell = "Haskell";
         public const string asm = "ASM";
         public const string html = "HTML";
@@ -29,7 +29,7 @@ namespace LfragmentApi.Entities
         {
             return new List<string>
             {
-                CSharp, Java, Cpp, JavaScript, RubyOnRails, Haskell, ASM, HTML, CSS, YAML
+                csharp, java, cpp, js, ruby_on_rails, haskell, asm, html, css, yaml
             };
         }
     }

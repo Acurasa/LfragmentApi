@@ -6,16 +6,16 @@ namespace LfragmentApi.Helpers
 {
     public class FragmentFilter
     {
-        private readonly FilterSettings filter;
-        private readonly FragmentDbContext _context;
+        //private readonly FilterSettings filter;
+        //private readonly FragmentDbContext _context;
 
-        public FragmentFilter(FilterSettings filter,FragmentDbContext _context)
-        {
-            this.filter = filter;
-            this._context = _context;
-        }
+        //public FragmentFilter(FilterSettings filter,FragmentDbContext _context)
+        //{
+        //    this.filter = filter;
+        //    this._context = _context;
+        //}
 
-        public IQueryable<Entities.Fragment> Filter()
+        public static IQueryable<Entities.Fragment> Filter(FilterSettings filter, FragmentDbContext _context)
         {
             var query = _context.Fragments.AsQueryable();
 
@@ -25,11 +25,11 @@ namespace LfragmentApi.Helpers
                     EF.Functions.Like(x.Content.ToLower(), $"%{filter.SearchTerm}%".ToLower()) ||
                     EF.Functions.Like(x.Title.ToLower(), $"%{filter.SearchTerm}%".ToLower()));
             }
-            
+
             if (!string.IsNullOrEmpty(filter.ProgLang))
             {
                 List<string> langs = PL.ToList();
-                query = query.Where(x => x.Tags.Any(n=> langs.Contains(filter.ProgLang)));
+                query = query.Where(x => x.Tags.Any(n => langs.Contains(filter.ProgLang)));
             }
 
             query = filter.OrderBy switch
@@ -38,11 +38,6 @@ namespace LfragmentApi.Helpers
                 "updated" => query.OrderByDescending(x => x.Updated),
                 _ => query.OrderBy(x => x.Created)
             };
-
-            //query = filter.FilterBy switch
-            //{
-                
-            //};
 
             return query;
         }

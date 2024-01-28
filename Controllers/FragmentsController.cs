@@ -27,7 +27,7 @@ namespace LfragmentApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Fragment>> GetAll(Guid id)
+        public async Task<ActionResult<Fragment>> GetByID(Guid id)
         {
             var fragment = await _context.Fragments
                 .FirstOrDefaultAsync(f => f.Id == id);
@@ -35,31 +35,33 @@ namespace LfragmentApi.Controllers
             return fragment is null ? NotFound() : Ok(fragment);
         }
 
-        [HttpGet("Filter")]
+        [HttpGet]
         public async Task<ActionResult<List<Fragment>>> GetFiltered([FromQuery] FilterSettings filter)
         {
-            var query = _context.Fragments.AsQueryable();
-
-            if (!string.IsNullOrEmpty(filter.SearchTerm))
+            var query = FragmentFilter.Filter(filter, _context);
+            var totalCount = await query.CountAsync();
+            var pageCount = (int)Math.Ceiling(totalCount / (double)filter.PageSize);
+            var result = await query
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .ToListAsync();
+  
+            return Ok(new
             {
-                query = query.Where(x =>
-                    EF.Functions.Like(x.Content.ToLower(), $"%{filter.SearchTerm}%".ToLower()) ||
-                    EF.Functions.Like(x.Title.ToLower(), $"%{filter.SearchTerm}%".ToLower()));
-            }
+                Results = result,
+                PageCount = pageCount,
+                TotalCount = totalCount
+            });
+        }
 
-            query = filter.OrderBy switch
-            {
-                "new" => query.OrderByDescending(x => x.Created),
-                "updated" => query.OrderByDescending(x=> x.Updated), 
-                _ => query.OrderBy(x => x.Created)
-            };
 
-            query = filter.FilterBy switch
-            {
-                "C#" => query.Where(x => x.Tags.Any(t=>t.Name == "C#")),
-            };
+        [HttpGet("ByUser/{id}")]
+        public async Task<ActionResult<List<Fragment>>> GetByUserId(Guid id)
+        {
+            var fragments = await _context.Fragments.Where(f => f.UserId == id)
+                .ToListAsync();
 
-            return Ok();
+            return fragments is null ? NotFound() : Ok(fragments);
         }
     }
 }

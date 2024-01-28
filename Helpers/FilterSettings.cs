@@ -3,7 +3,7 @@
     public class FilterSettings
     {
         public int PageSize { get; set; } = 10;
-        public int PageCount { get; set; } = 1;
+        public int PageNumber { get; set; } = 1;
         public string FilterBy { get; set; }
         public string OrderBy {  get; set; }
         public string SearchTerm { get; set; }
