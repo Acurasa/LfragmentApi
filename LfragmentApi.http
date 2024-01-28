@@ -1,0 +1,6 @@
+@LfragmentApi_HostAddress = http://localhost:5052
+
+GET {{LfragmentApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
