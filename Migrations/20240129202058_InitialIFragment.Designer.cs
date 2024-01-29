@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LfragmentApi.Migrations
 {
     [DbContext(typeof(FragmentDbContext))]
-    [Migration("20240127171925_initial")]
-    partial class initial
+    [Migration("20240129202058_InitialIFragment")]
+    partial class InitialIFragment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace LfragmentApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("FragmentTag", b =>
+                {
+                    b.Property<Guid>("FragmentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("TagsName")
+                        .HasColumnType("text");
+
+                    b.HasKey("FragmentId", "TagsName");
+
+                    b.HasIndex("TagsName");
+
+                    b.ToTable("FragmentTag");
+                });
 
             modelBuilder.Entity("LfragmentApi.Entities.Fragment", b =>
                 {
@@ -59,13 +74,7 @@ namespace LfragmentApi.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("FragmentId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("fragment");
-
                     b.HasKey("Name");
-
-                    b.HasIndex("FragmentId");
 
                     b.ToTable("Tags");
                 });
@@ -93,18 +102,19 @@ namespace LfragmentApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("LfragmentApi.Entities.Tag", b =>
+            modelBuilder.Entity("FragmentTag", b =>
                 {
                     b.HasOne("LfragmentApi.Entities.Fragment", null)
-                        .WithMany("Tags")
+                        .WithMany()
                         .HasForeignKey("FragmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("LfragmentApi.Entities.Fragment", b =>
-                {
-                    b.Navigation("Tags");
+                    b.HasOne("LfragmentApi.Entities.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

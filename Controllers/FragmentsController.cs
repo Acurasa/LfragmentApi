@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using LfragmentApi.Data;
 using LfragmentApi.Entities;
 using LfragmentApi.Helpers;
+using LfragmentApi.DTOs;
 
 namespace LfragmentApi.Controllers
 {
     public class FragmentController : ControllerBase
     {
         private readonly FragmentDbContext _context;
+        private readonly UserDbContext _user;
 
-        public FragmentController(FragmentDbContext context)
+        public FragmentController(FragmentDbContext fragmentDbContext, UserDbContext userDbContext)
         {
-            _context = context;
+            _context = fragmentDbContext;
+            _user = userDbContext;
         }
 
         [HttpGet]
@@ -62,6 +65,13 @@ namespace LfragmentApi.Controllers
                 .ToListAsync();
 
             return fragments is null ? NotFound() : Ok(fragments);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Fragment>> Post(CreateFragmentDto createFragmentDto)
+        {
+            
+            return Ok();
         }
     }
 }
