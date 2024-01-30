@@ -1,13 +1,16 @@
 using LfragmentApi.Data;
+using LfragmentApi.Entities;
+using LfragmentApi.RequestHelper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
+builder.Services.AddAutoMapper(typeof(MappingProfiler));
 builder.Services.AddDbContext<FragmentDbContext>(opt =>
 {
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -21,7 +24,7 @@ builder.Services.AddDbContext<UserDbContext>(opt =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication();
-builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<UserDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<UserDbContext>().AddDefaultTokenProviders();
 
 var app = builder.Build();
 //if (app.Environment.IsDevelopment())
@@ -31,7 +34,7 @@ var app = builder.Build();
 //}
 
 // Configure the HTTP request pipeline.
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<User>();
 app.UseAuthorization();
 
 app.MapControllers();

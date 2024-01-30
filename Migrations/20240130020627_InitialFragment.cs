@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LfragmentApi.Migrations
 {
     /// <inheritdoc />
-    public partial class inital : Migration
+    public partial class InitialFragment : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,21 +37,6 @@ namespace LfragmentApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tags", x => x.Name);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Password_hash = table.Column<string>(type: "text", nullable: true),
-                    Email = table.Column<string>(type: "text", nullable: true),
-                    Role = table.Column<int>(type: "integer", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -89,9 +74,6 @@ namespace LfragmentApi.Migrations
         {
             migrationBuilder.DropTable(
                 name: "FragmentTag");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Fragments");

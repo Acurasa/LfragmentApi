@@ -1,16 +1,12 @@
 ﻿using LfragmentApi.Entities;
-using System.ComponentModel.DataAnnotations;
 
 namespace LfragmentApi.DTOs
 {
-    public class CreateFragmentDto
+    public class UpdateFragmentDto
     {
-        [Required]
+        public Guid Id { get; set; }
         public string Title { get; set; }
-
-        [Required]
         public string Content { get; set; }
-
         public List<string> Tags { get; set; }
     }
 }

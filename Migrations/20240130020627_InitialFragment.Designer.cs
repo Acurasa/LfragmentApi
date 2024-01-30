@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LfragmentApi.Migrations
 {
     [DbContext(typeof(FragmentDbContext))]
-    [Migration("20240129202058_InitialIFragment")]
-    partial class InitialIFragment
+    [Migration("20240130020627_InitialFragment")]
+    partial class InitialFragment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,29 +77,6 @@ namespace LfragmentApi.Migrations
                     b.HasKey("Name");
 
                     b.ToTable("Tags");
-                });
-
-            modelBuilder.Entity("LfragmentApi.Entities.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password_hash")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("FragmentTag", b =>
